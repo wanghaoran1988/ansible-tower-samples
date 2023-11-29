@@ -1,0 +1,6 @@
+- name: Hello k8s Sample
+  hosts: all
+  tasks:
+    - name: Hello k8s
+      debug:
+        msg: "Hello k8s!"
