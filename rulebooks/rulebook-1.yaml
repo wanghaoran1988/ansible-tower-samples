@@ -1,0 +1,20 @@
+---
+- name: Listen for events on a webhook
+  hosts: all
+  execution_strategy: parallel  # with this strategy, the alerts will be handled in //
+
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+
+  rules:
+    - name: pagerduty
+      # sends all pagerduty webhook calls to cadctl
+      condition: event.meta.headers['User-Agent'] == "PagerDuty-Webhook/V3.0"
+      actions:
+        - run_playbook:
+            name: hello_world.yml
+            extra_vars:
+              payload: "{{ event.payload }}"
+
